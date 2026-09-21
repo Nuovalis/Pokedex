@@ -9,6 +9,11 @@ static pokemon *pokemon_dup(const pokemon *p)
     return copy;
 }
 
+static int pokemon_compare_id(type_t *a, type_t *b)
+{
+    return ((pokemon *)a)->id - ((pokemon *)b)->id;
+}
+
 pokemon *pokemon_create(int id, int dexno, const char name[20], char type, const char species[20], double weight, const char entry[200])
 {
     pokemon *pokeptr = malloc(sizeof(pokemon));
@@ -52,9 +57,10 @@ void add_pokemon_middle(linked_list_t *pokedex, pokemon *newPokemon, int positio
 
 void update_pokemon(linked_list_t *pokedex, pokemon *newPokemon)
 {
-    int position = list_find_position(*pokedex, newPokemon);
+    int position = list_find_position(*pokedex, newPokemon, pokemon_compare_id);
     int pointerPosition = 0;
     node_t *head = pokedex->first;
+    pokemon *p = pokemon_dup(newPokemon);
 
     if(position != -1){
         while (pointerPosition != position)
@@ -62,7 +68,7 @@ void update_pokemon(linked_list_t *pokedex, pokemon *newPokemon)
             head = head->next;
             pointerPosition++;
         }
-        list_modify(head, newPokemon);
+        list_modify(head, p);
     }
 }
 

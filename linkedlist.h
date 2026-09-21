@@ -30,7 +30,8 @@
     void list_delete_middle(linked_list_t *list, int position);
     void list_modify(node_t *modify, type_t *data);
     int  list_found(linked_list_t list,type_t *data);
-    int  list_find_position(linked_list_t list,type_t *data);
+    int  list_find_position(linked_list_t list,type_t *data,
+                        int (*compare)(type_t *a, type_t *b));
     void list_display(linked_list_t list, void (*print_data)(type_t *data));
     void list_clean(linked_list_t *list);
     int  list_is_empty(linked_list_t list);

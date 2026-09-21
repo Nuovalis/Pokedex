@@ -69,25 +69,27 @@ void list_add_middle(linked_list_t *list, type_t *data, int position)
     int size = list_size(head);
     int current_position = 0;
 
-    if(position == 0){
-        list_add_first(list, data);
-    } else if (position == size){
-        list_add_last(list, data);
-    } else if ((position < size) && (position > 0)){
-        while (current_position != position-1)
-        {
-            current_position++;
-            head = head->next;
+    if(newNode != NULL){
+        if(position == 0){
+            list_add_first(list, data);
+        } else if (position == size){
+            list_add_last(list, data);
+        } else if ((position < size) && (position > 0)){
+            while (current_position != position-1)
+            {
+                current_position++;
+                head = head->next;
+            }
+            prevNode = head;
+            newNode->next = prevNode->next;
+            newNode->prev = prevNode;
+            if (prevNode->next != NULL){
+                prevNode->next->prev = newNode;
+            }
+            prevNode->next = newNode;
+        } else{
+            printf("Error: Position is out of bounds.");
         }
-        prevNode = head;
-        newNode->next = prevNode->next;
-        newNode->prev = prevNode;
-        if (prevNode->next != NULL){
-            prevNode->next->prev = newNode;
-        }
-        prevNode->next = newNode;
-    } else{
-        printf("Error: Position is out of bounds.");
     }
 }
 
@@ -157,7 +159,9 @@ void list_delete_middle(linked_list_t *list, int position)
 
 void list_modify(node_t *modify, type_t *newData)
 {
+    type_t *tmp = modify->data;
     modify->data = newData;
+    free(tmp);
 }
 
 int list_found(linked_list_t list, type_t *data)
@@ -174,13 +178,14 @@ int list_found(linked_list_t list, type_t *data)
     return 0;
 }
 
-int list_find_position(linked_list_t list, type_t *data)
+int list_find_position(linked_list_t list, type_t *data,
+                        int (*compare)(type_t *a, type_t *b))
 {
     node_t *head = list.first;
     int position = 0;
 
     while (head != NULL) {
-        if(head->data == data) {
+        if (compare(head->data, data) == 0) {
             return position;
         }
         position++;
@@ -189,7 +194,6 @@ int list_find_position(linked_list_t list, type_t *data)
     return -1;
 }
 
-//To do: change display setting
 void list_display(linked_list_t list, void (*print_data)(type_t *data))
 {
     node_t *ptr = list.first;
@@ -199,6 +203,7 @@ void list_display(linked_list_t list, void (*print_data)(type_t *data))
         print_data(ptr->data);
         ptr = ptr->next;
     }
+    printf("\n");
 }
 
 void list_clean(linked_list_t *list)
