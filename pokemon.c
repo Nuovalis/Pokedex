@@ -14,7 +14,7 @@ static int pokemon_compare_id(type_t *a, type_t *b)
     return ((pokemon *)a)->id - ((pokemon *)b)->id;
 }
 
-pokemon *pokemon_create(int id, int dexno, const char name[20], char type, const char species[20], double weight, const char entry[200])
+pokemon *pokemon_create(int id, int dexno, const char name[20], const pokemon_type *type1, const pokemon_type *type2, const char species[20], double weight, const char entry[200])
 {
     pokemon *pokeptr = malloc(sizeof(pokemon));
 
@@ -23,7 +23,8 @@ pokemon *pokemon_create(int id, int dexno, const char name[20], char type, const
         pokeptr->dexno = dexno;
         strncpy(pokeptr->name, name, sizeof pokeptr->name - 1);
         pokeptr->name[sizeof pokeptr->name - 1] = '\0';
-        pokeptr->type = type;
+        pokeptr->type1 = type1;
+        pokeptr->type2 = type2;
         strncpy(pokeptr->species, species, sizeof pokeptr->species - 1);
         pokeptr->species[sizeof pokeptr->species - 1] = '\0';
         pokeptr->weight = weight;
@@ -66,6 +67,7 @@ void update_pokemon(linked_list_t *pokedex, pokemon *newPokemon)
         while (pointerPosition != position)
         {
             head = head->next;
+            
             pointerPosition++;
         }
         list_modify(head, p);
@@ -90,5 +92,27 @@ void remove_pokemon_middle(linked_list_t *pokedex, int position)
 void print_pokemon(type_t *data) 
 {
     pokemon *p = (pokemon *)data;
-    printf("#%d %s (%s) - %.1fkg\n", p->dexno, p->name, p->species, p->weight);
+    if (p->type2 != NULL) {
+        printf("#%d %s (%s) - %.1fkg - %s/%s\n",
+               p->dexno, p->name, p->species, p->weight,
+               p->type1->name, p->type2->name);
+    } else {
+        printf("#%d %s (%s) - %.1fkg - %s\n",
+               p->dexno, p->name, p->species, p->weight,
+               p->type1->name);
+    }
+}
+
+void update_dex_number(linked_list_t *pokedex)
+{
+    int pointerPosition = 0;
+    node_t *head = pokedex->first;
+    pokemon *p;
+    while (head != NULL) 
+    {
+        p = head->data;
+        p->dexno = pointerPosition + 1;
+        pointerPosition++;
+        head = head->next;
+    }
 }
