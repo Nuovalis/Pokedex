@@ -2,12 +2,12 @@
     #define _POKEMON_TYPES_H_
 
     #include "linkedlist.h"
-    #include <stdio.h>
-
-    #define NUM_TYPES 18
+    #include <stdio.h>    
 
     typedef enum {NORMAL, FIRE, WATER, ELECTRIC, GRASS, ICE, FIGHTING, POISON, GROUND, FLYING, PSYCHIC, BUG, ROCK, GHOST, DRAGON, DARK, STEEL, FAIRY
     } type_id;
+
+    #define NUM_TYPES FAIRY + 1
 
     typedef struct pokemon_type {
         int id;

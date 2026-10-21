@@ -15,26 +15,30 @@
     typedef struct {
         struct node_t *first;
         struct node_t *last;
+        int size;
     } linked_list_t;
 
-    #define LINKEDLISTINIT {NULL,NULL}
+    #define LINKEDLISTINIT {NULL,NULL, 0}
 
     node_t *node_init(type_t *data);
     void list_init(linked_list_t *list);
     int  list_size(node_t *head);
-    void list_add_first(linked_list_t *list,type_t *data);
-    void list_add_last(linked_list_t *list,type_t *data);
-    void list_add_middle(linked_list_t *list,type_t *data, int position);
-    void list_delete_first(linked_list_t *list);
-    void list_delete_last(linked_list_t *list);
-    void list_delete_middle(linked_list_t *list, int position);
-    void list_modify(node_t *modify, type_t *data);
-    int  list_found(linked_list_t list,type_t *data);
+    int  list_length(linked_list_t list);
+    int  list_add_first(linked_list_t *list,type_t *data);
+    int  list_add_last(linked_list_t *list,type_t *data);
+    int  list_add_middle(linked_list_t *list,type_t *data, int position);
+    int  list_delete_first(linked_list_t *list);
+    int  list_delete_last(linked_list_t *list);
+    int  list_delete_middle(linked_list_t *list, int position);
+    int  list_modify(node_t *modify, type_t *data);
+    int  list_found(linked_list_t list, type_t *data,
+                        int (*compare)(type_t *a, type_t *b));
     int  list_find_position(linked_list_t list,type_t *data,
                         int (*compare)(type_t *a, type_t *b));
     void list_display(linked_list_t list, void (*print_data)(type_t *data));
     void list_clean(linked_list_t *list);
+    void list_free_all(linked_list_t *list);
     int  list_is_empty(linked_list_t list);
     type_t *list_get(linked_list_t list, int position);
-    void list_free_all(linked_list_t *list);
+    int list_sort(linked_list_t *list, int (*compare)(type_t *a, type_t *b));
 #endif

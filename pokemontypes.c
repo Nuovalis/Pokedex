@@ -19,8 +19,10 @@ const pokemon_type *type_get_by_name(const char *name)
 
 double type_effectiveness(const pokemon_type *attacker, const pokemon_type *defender)
 {
+    double v = 1.0;
+    if (attacker == NULL || defender == NULL) return 1.0;
     if (attacker->immune[defender->id]) return 0.0;
-    double v = attacker->effectiveness[defender->id];
+    v = attacker->effectiveness[defender->id];
     return (v == 0.0) ? 1.0 : v;
 }
 
